@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<!--
+  ============================================================
+  Fluffy Frosting — Premium Bakery Website
+  ============================================================
+  
+  PURPOSE:
+    Single-page website for "Fluffy Frosting", a premium
+    handcrafted cake bakery located in Chennai, India.
+    Features an interactive menu, theme cake gallery, order
+    form (via WhatsApp), reviews marquee, and location map.
+
+  TECHNOLOGIES:
+    - HTML5 with semantic elements
+    - CSS3 (style.css) — custom properties, flexbox, grid
+    - Vanilla JavaScript (script.js) — no frameworks
+    - Google Fonts: Outfit, DM Sans, Dancing Script
+
+  STRUCTURE:
+    1. Preloader       → Splash screen on load
+    2. Navigation      → Fixed top nav with mobile hamburger
+    3. Hero            → Full-height glass-card hero section
+    4. About           → Brief bakery introduction
+    5. Menu            → Interactive gallery + filterable grid
+    6. Theme Cakes     → Tiered theme cake showcase
+    7. Info Marquee    → Scrolling certifications banner
+    8. How It Works    → 4-step roadmap timeline
+    9. Reviews         → Infinite marquee with customer reviews
+   10. Special Offers  → Offers cards + delivery info
+   11. Order Form      → WhatsApp order submission
+   12. Find Us         → Address + embedded Google Map
+   13. Cart System     → Floating button + sidebar modal
+   14. Success Modal   → Post-order confirmation
+   15. Footer          → Contact, address, copyright
+
+  HOW TO EDIT:
+    - Menu items: Edit `menuData` object in script.js
+    - Theme cakes: Edit `themeData` object in script.js
+    - Styling: All styles in style.css, uses CSS custom props
+    - WhatsApp number: Change WHATSAPP_NUMBER in script.js
+  ============================================================
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3D1152">
+
+    <!-- SEO: Primary page title with target keywords -->
+    <title>Fluffy Frosting | Premium Handcrafted Cakes in Chennai</title>
+    
+    <!-- Favicon: Browser tab icon -->
+    <link rel="icon" href="images/hero-shop.png" type="image/png">
+
+    <!-- SEO: Meta description for search engine snippets -->
+    <meta name="description"
+        content="Bakers and makers of all things sweet. Order premium customized cakes, handcrafted desserts, and fresh pastries from Fluffy Frosting Chennai. Daily fresh baking with love.">
+    <meta name="keywords" content="cakes chennai, custom cakes, theme cakes, birthday cakes, bakery, fluffy frosting, handcrafted cakes, premium bakery chennai">
+    
+    <!-- SEO: Crawl directives & canonical URL -->
+    <link rel="canonical" href="https://fluffyfrosting.com/" />
+    <meta name="robots" content="index, follow">
+
+    <!-- SEO: Open Graph tags for social sharing -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fluffy Frosting | Premium Handcrafted Cakes in Chennai">
+    <meta property="og:description" content="Sweetening your special moments with handcrafted cakes and desserts. Shop our premium collection today!">
+    <meta property="og:image" content="images/hero-shop.png">
+    <meta property="og:url" content="https://fluffyfrosting.com/">
+    <meta property="og:locale" content="en_IN">
+
+    <!-- SEO: Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fluffy Frosting | Handcrafted Cakes">
+    <meta name="twitter:description" content="Premium handcrafted cakes & desserts in Chennai. Order online for delivery.">
+    
+    <!-- PERFORMANCE: Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- PERFORMANCE: Preload the hero background image (LCP critical) -->
+    <link rel="preload" href="images/nav-bg-hotpink.png" as="image" type="image/png">
+
+    <!-- Typography: Outfit (headings), DM Sans (body), Dancing Script (brand) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- SEO: Schema.org structured data for local business -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Bakery",
+      "name": "Fluffy Frosting",
+      "image": "https://fluffyfrosting.com/images/hero-shop.png",
+      "@id": "https://fluffyfrosting.com/",
+      "url": "https://fluffyfrosting.com/",
+      "telephone": "+919962202704",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Kundrathur Main Rd, Kovur, Thandalam",
+        "addressLocality": "Chennai",
+        "postalCode": "600128",
+        "addressCountry": "IN"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 13.0103895,
+        "longitude": 80.1231047
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+        ],
+        "opens": "11:00",
+        "closes": "22:00"
+      }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- 
+      ACCESSIBILITY: Fallback for users with JavaScript disabled.
+      The site relies on JS for menu rendering, cart, and order form.
+    -->
+    <noscript>
+        <div style="text-align:center;padding:2rem;background:#FBF8F3;font-family:sans-serif;">
+            <h2>JavaScript Required</h2>
+            <p>Please enable JavaScript to use the Fluffy Frosting interactive menu and ordering system.</p>
+            <p>Call us at <a href="tel:9962202704">9962202704</a> or <a href="https://wa.me/919962202704">WhatsApp</a> to place your order.</p>
+        </div>
+    </noscript>
+
+    <!-- ==========================================================
+         PRELOADER
+         Branded splash screen shown while page loads.
+         Auto-dismissed by JS after assets are ready.
+         ========================================================== -->
+    <div id="preloader" class="preloader" role="status" aria-label="Loading Fluffy Frosting">
+        <div class="preloader-content">
+            <!-- CLS prevention: explicit width/height prevent layout shift -->
+            <img src="images/preloader-logo.jpg" alt="Fluffy Frosting Logo" class="preloader-logo" width="260" height="130">
+            <div class="preloader-spinner" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================================
+         NAVIGATION
+         Fixed top nav bar with glassmorphism background.
+         Collapses to hamburger menu on mobile (≤768px).
+         ========================================================== -->
+    <header>
+        <nav class="nav" id="mainNav" aria-label="Main Navigation">
+            <div class="container nav-container">
+                <!-- Brand logo / home link -->
+                <a href="#home" class="nav-brand" aria-label="Fluffy Frosting - Home">
+                    <span class="nav-brand-name">Fluffy Frosting</span>
+                </a>
+
+                <!-- Desktop nav links (hidden on mobile, shown via hamburger) -->
+                <div class="nav-links" id="navLinks" role="navigation">
+                    <a href="#about">About</a>
+                    <a href="#menu">Menu</a>
+                    <a href="#theme-cakes">Theme Cakes</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#reviews">Reviews</a>
+                </div>
+
+                <!-- Mobile hamburger toggle button -->
+                <button class="nav-toggle" id="mobileToggle" aria-label="Toggle Mobile Navigation" aria-expanded="false">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+
+    <!-- ==========================================================
+         HERO SECTION
+         Full-viewport glass-card hero with bakery image,
+         tagline, CTA buttons, and operating hours.
+         Uses the hot-pink background image with glassmorphism.
+         ========================================================== -->
+    <section class="hero" id="home" aria-label="Welcome to Fluffy Frosting">
+        <div class="container hero-grid hero-glass-card reveal">
+            <div class="hero-content">
+                <!-- Badge: decorative category label -->
+                <div class="hero-badge">The Cake Shop</div>
+
+                <!-- SEO: Single h1 per page — primary heading -->
+                <h1>Baking moments into <span>memories</span></h1>
+
+                <p class="hero-description">Premium cakes and handcrafted desserts for every occasion.</p>
+
+                <!-- Primary CTA buttons -->
+                <div class="hero-buttons">
+                    <a href="#menu" class="btn btn-cta" id="heroViewMenu">View Menu</a>
+                    <a href="#order" class="btn btn-outline" id="heroOrderNow">Order Now</a>
+                </div>
+
+                <!-- Quick info: hours and location -->
+                <div class="hero-info">
+                    <div class="hero-info-item"><span>Daily 11 AM – 10 PM</span></div>
+                    <div class="hero-info-item"><span>Kundrathur, Chennai</span></div>
+                </div>
+            </div>
+
+            <!-- Hero image: bakery shop front -->
+            <div class="hero-visual">
+                <div class="hero-placeholder-wrap">
+                    <img src="images/hero-shop.png" alt="Fluffy Frosting Bakery Shop Front - Chennai" class="hero-placeholder-img" fetchpriority="high" width="360" height="480">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         ABOUT SECTION
+         Brief introduction to the bakery brand and values.
+         ========================================================== -->
+    <section class="about section-padding" id="about" aria-label="About Fluffy Frosting">
+        <div class="container">
+            <div class="about-content reveal">
+                <h2>About Us</h2>
+                <p>At <strong>Fluffy Frosting</strong>, we craft freshly baked cakes that turn moments into memories. Made with the finest ingredients and a touch of artistry, each cake is designed to delight — whether it's a timeless classic or a fully customized creation. Your vision, our passion, perfectly baked.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         MENU SECTION
+         Two-part interactive menu system:
+         1. Gallery Grid — Visual category cards users click
+         2. Dynamic Grid — Filterable product cards rendered by JS
+         
+         Menu data lives in script.js (menuData object).
+         Categories: Cake Flavours, FF Signature, Rich Plum Cakes,
+                     Tea Cakes, Add-ons
+         ========================================================== -->
+    <section class="menu section-padding bg-beige" id="menu" aria-label="Our Menu">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>Our Menu</h2>
+                <p>Handcrafted with love, baked to perfection.</p>
+            </div>
+
+            <!-- 1. Gallery Grid: Visual category cards (top section) -->
+            <div class="menu-gallery-wrap reveal">
+                <div class="menu-gallery-grid" role="list" aria-label="Menu Categories">
+                    <div class="gallery-card" data-target-category="Cake Flavours" role="listitem" tabindex="0" aria-label="Browse Cake Flavours">
+                        <div class="card-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-title"><h3>Cake Flavours</h3></div>
+                    </div>
+                    <div class="gallery-card" data-target-category="FF Signature" role="listitem" tabindex="0" aria-label="Browse FF Signature cakes">
+                        <div class="card-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-title"><h3>FF Signature</h3></div>
+                    </div>
+                    <div class="gallery-card" data-target-category="Rich Plum Cakes" role="listitem" tabindex="0" aria-label="Browse Rich Plum Cakes">
+                        <div class="card-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-title"><h3>Rich Plum Cakes</h3></div>
+                    </div>
+                    <div class="gallery-card" data-target-category="Tea Cakes" role="listitem" tabindex="0" aria-label="Browse Tea Cakes">
+                        <div class="card-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-title"><h3>Tea Cakes</h3></div>
+                    </div>
+                    <div class="gallery-card" data-target-category="Add-ons" role="listitem" tabindex="0" aria-label="Browse Add-ons">
+                        <div class="card-bg"></div>
+                        <div class="card-overlay"></div>
+                        <div class="card-title"><h3>Add-ons</h3></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Filter Bar + Dynamic Grid (hidden until category selected) -->
+            <div id="menuContentWrapper" class="menu-content-hidden">
+                
+                <!-- Sticky filter bar with category pills + search -->
+                <div class="menu-filter-bar reveal" id="menuFilterBar" role="toolbar" aria-label="Menu Filters">
+                    <div class="filter-pills" id="menuFilterPills" role="tablist">
+                        <button class="filter-btn active" data-category="Cake Flavours" role="tab" aria-selected="true">Cake Flavours</button>
+                        <button class="filter-btn" data-category="FF Signature" role="tab" aria-selected="false">FF Signature</button>
+                        <button class="filter-btn" data-category="Rich Plum Cakes" role="tab" aria-selected="false">Rich Plum Cakes</button>
+                        <button class="filter-btn" data-category="Tea Cakes" role="tab" aria-selected="false">Tea Cakes</button>
+                        <button class="filter-btn" data-category="Add-ons" role="tab" aria-selected="false">Add-ons</button>
+                    </div>
+                    <div class="filter-search">
+                        <input type="text" id="menuSearchInput" placeholder="Search menu..." autocomplete="off" aria-label="Search menu items">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                </div>
+
+                <!-- Dynamic product grid — populated by JS -->
+                <div class="menu-dynamic-container reveal" role="tabpanel" aria-label="Menu Items">
+                    <div class="menu-dynamic-grid" id="menuDynamicGrid">
+                        <!-- Cards dynamically injected here by script.js renderMenu() -->
+                    </div>
+                    <div id="menuEmptyState" class="menu-empty-state" style="display: none;">
+                        <p>No items found matching your search. Try another category or keyword.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         THEME CAKES SECTION
+         Tiered themed cake showcase (Single, Double, Triple layer).
+         Clicking a tier card reveals a sub-gallery of trending
+         designs for that tier, populated from themeData in JS.
+         ========================================================== -->
+    <section class="theme-cakes section-padding" id="theme-cakes" aria-label="Theme Cakes">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>Theme Cakes</h2>
+                <p>Customized cakes crafted for your special celebrations. Choose your tier.</p>
+            </div>
+
+            <!-- Tier selection cards -->
+            <div class="theme-grid reveal" role="list" aria-label="Theme Cake Tiers">
+                <!-- Single Layer -->
+                <div class="gallery-card theme-card" data-category="Theme Cakes" role="listitem" tabindex="0" aria-label="Single Layer Theme Cakes">
+                    <div class="card-bg theme-bg-pink"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-title"><h3>Single Layer Theme</h3></div>
+                </div>
+
+                <!-- Double Layer -->
+                <div class="gallery-card theme-card" data-category="Theme Cakes" role="listitem" tabindex="0" aria-label="Double Layer Theme Cakes">
+                    <div class="card-bg theme-bg-purple"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-title"><h3>Double Layer Theme</h3></div>
+                </div>
+
+                <!-- Triple Layer -->
+                <div class="gallery-card theme-card" data-category="Theme Cakes" role="listitem" tabindex="0" aria-label="Triple Layer Theme Cakes">
+                    <div class="card-bg theme-bg-beige"></div>
+                    <div class="card-overlay"></div>
+                    <div class="card-title"><h3>Triple Layer Theme</h3></div>
+                </div>
+            </div>
+
+            <!-- Dynamic Theme Gallery: shows trending designs per tier -->
+            <div id="themeGalleryContainer" class="theme-gallery-container menu-content-hidden">
+                <div class="theme-gallery-header">
+                    <h3 id="themeGalleryTitle" class="theme-sub-title"></h3>
+                    <p class="theme-sub-desc">Explore our trending designs for this tier. Contact us to customize further.</p>
+                </div>
+                <div id="themeGalleryGrid" class="theme-gallery-grid"></div>
+                <div class="theme-gallery-cta">
+                    <a href="#order" class="btn btn-theme-custom" id="themeCustomBtn">Customise Your Theme Cake</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         INFO MARQUEE
+         Infinite horizontal scroll displaying certifications
+         and licensing credentials. Duplicated for seamless loop.
+         Uses CSS animation (scroll-x keyframes).
+         ========================================================== -->
+    <section class="info-marquee" aria-label="Certifications and Licenses">
+        <div class="marquee-group">
+            <span>FSSAI Licensed</span><span class="diamond" aria-hidden="true">♦</span>
+            <span>Trade Licensed</span><span class="diamond" aria-hidden="true">♦</span>
+            <span>Health Trade Licensed</span><span class="diamond" aria-hidden="true">♦</span>
+            <span>Water Testing Certified</span><span class="diamond" aria-hidden="true">♦</span>
+        </div>
+        <!-- Duplicate groups for seamless infinite scroll effect -->
+        <div class="marquee-group" aria-hidden="true">
+            <span>FSSAI Licensed</span><span class="diamond">♦</span>
+            <span>Trade Licensed</span><span class="diamond">♦</span>
+            <span>Health Trade Licensed</span><span class="diamond">♦</span>
+            <span>Water Testing Certified</span><span class="diamond">♦</span>
+        </div>
+        <div class="marquee-group" aria-hidden="true">
+            <span>FSSAI Licensed</span><span class="diamond">♦</span>
+            <span>Trade Licensed</span><span class="diamond">♦</span>
+            <span>Health Trade Licensed</span><span class="diamond">♦</span>
+            <span>Water Testing Certified</span><span class="diamond">♦</span>
+        </div>
+        <div class="marquee-group" aria-hidden="true">
+            <span>FSSAI Licensed</span><span class="diamond">♦</span>
+            <span>Trade Licensed</span><span class="diamond">♦</span>
+            <span>Health Trade Licensed</span><span class="diamond">♦</span>
+            <span>Water Testing Certified</span><span class="diamond">♦</span>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         HOW IT WORKS — Roadmap Timeline
+         4-step visual process: Choose → Customize → Bake → Deliver.
+         Horizontal on desktop, vertical on mobile (≤768px).
+         Uses numbered nodes connected by a gradient line.
+         ========================================================== -->
+    <section class="how-it-works section-padding" id="how-it-works" aria-label="How Ordering Works">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>How It Works</h2>
+                <p>From choosing to delivery — a simple 4-step journey.</p>
+            </div>
+            <div class="roadmap" role="list" aria-label="Ordering Process Steps">
+                <!-- Gradient line connecting all steps -->
+                <div class="roadmap-line" aria-hidden="true"></div>
+
+                <div class="roadmap-step reveal" role="listitem">
+                    <div class="roadmap-node"><span>1</span></div>
+                    <div class="roadmap-card">
+                        <h4>Choose Your Cake</h4>
+                        <p>Browse our menu and pick your favourite flavor, design, or create a custom cake from scratch.</p>
+                    </div>
+                </div>
+                <div class="roadmap-step reveal" role="listitem">
+                    <div class="roadmap-node"><span>2</span></div>
+                    <div class="roadmap-card">
+                        <h4>Customize Your Design</h4>
+                        <p>Add your personal touch — theme, message, color, tier count. We'll bring your vision to life.</p>
+                    </div>
+                </div>
+                <div class="roadmap-step reveal" role="listitem">
+                    <div class="roadmap-node"><span>3</span></div>
+                    <div class="roadmap-card">
+                        <h4>Fresh Baking Process</h4>
+                        <p>Every cake is baked fresh on the day of delivery using premium, quality-checked ingredients.</p>
+                    </div>
+                </div>
+                <div class="roadmap-step reveal" role="listitem">
+                    <div class="roadmap-node"><span>4</span></div>
+                    <div class="roadmap-card">
+                        <h4>Quick Delivery or Pickup</h4>
+                        <p>We deliver to your doorstep or you can pick it up fresh from our shop. Simple and hassle-free.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         CUSTOMER REVIEWS
+         Infinite horizontal marquee of review cards.
+         Uses JS-driven requestAnimationFrame for smooth scrolling.
+         Cards are duplicated in HTML for seamless loop.
+         Slows on hover/touch for readability.
+         ========================================================== -->
+    <section class="reviews section-padding bg-beige" id="reviews" aria-label="Customer Reviews">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>Customer Reviews</h2>
+                <p>What our customers say about us.</p>
+            </div>
+        </div>
+        <div class="marquee-wrapper" id="reviewMarquee">
+            <div class="marquee-track" id="reviewTrack">
+                <!-- Original review cards -->
+                <div class="review-card">
+                    <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="review-text">"The cakes were absolutely delicious, rich in flavor and perfectly baked. The pricing is also very reasonable for the quality."</p>
+                    <div class="review-author">
+                        <div class="review-avatar" aria-hidden="true">VR</div><span>Vignesh Rishi</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="review-text">"I ordered a 2 tier 3 kg cake and it turned out exactly like the picture. Very happy with the purchase."</p>
+                    <div class="review-author">
+                        <div class="review-avatar" aria-hidden="true">LR</div><span>Lavanya Raju</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="review-text">"I have been ordering cakes for years and every time the cakes are perfect. Ordering through WhatsApp is very convenient."</p>
+                    <div class="review-author">
+                        <div class="review-avatar" aria-hidden="true">NX</div><span>Nattalia Xavier</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="review-text">"Very nice cake. The design and quality were both excellent."</p>
+                    <div class="review-author">
+                        <div class="review-avatar" aria-hidden="true">SR</div><span>Shruti Rajan</span>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                    <p class="review-text">"Fresh cake and the taste was excellent."</p>
+                    <div class="review-author">
+                        <div class="review-avatar" aria-hidden="true">SD</div><span>Sathya Devaraj</span>
+                    </div>
+                </div>
+
+                <!-- Duplicate cards for seamless infinite marquee loop -->
+                <div class="review-card" aria-hidden="true">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"The cakes were absolutely delicious, rich in flavor and perfectly baked. The pricing is also very reasonable for the quality."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">VR</div><span>Vignesh Rishi</span>
+                    </div>
+                </div>
+                <div class="review-card" aria-hidden="true">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I ordered a 2 tier 3 kg cake and it turned out exactly like the picture. Very happy with the purchase."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">LR</div><span>Lavanya Raju</span>
+                    </div>
+                </div>
+                <div class="review-card" aria-hidden="true">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"I have been ordering cakes for years and every time the cakes are perfect. Ordering through WhatsApp is very convenient."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">NX</div><span>Nattalia Xavier</span>
+                    </div>
+                </div>
+                <div class="review-card" aria-hidden="true">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Very nice cake. The design and quality were both excellent."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">SR</div><span>Shruti Rajan</span>
+                    </div>
+                </div>
+                <div class="review-card" aria-hidden="true">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-text">"Fresh cake and the taste was excellent."</p>
+                    <div class="review-author">
+                        <div class="review-avatar">SD</div><span>Sathya Devaraj</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         SPECIAL OFFERS & DELIVERY
+         Three offer cards (Fruit Flavours, Theme Cakes, Delivery),
+         a bulk orders banner, and contact info.
+         ========================================================== -->
+    <section class="special-offers section-padding" id="delivery" aria-label="Special Offers and Delivery">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>Special Offers &amp; Delivery</h2>
+                <p>Premium deals and hassle-free delivery for your special moments.</p>
+            </div>
+            
+            <!-- Offer cards grid -->
+            <div class="offers-clean-grid reveal">
+                
+                <!-- Card 1: Fruit Flavours -->
+                <div class="clean-card" id="offerFruitFlavours">
+                    <div class="clean-card-img-wrap">
+                        <div class="prod-img-placeholder"></div>
+                    </div>
+                    <div class="clean-card-content">
+                        <h4>Fruit Flavours</h4>
+                        <p>Experience the freshness of real fruits in every bite.
+                            <span class="offer-highlight">Buy 1 KG Get 1/2 KG Free</span>
+                        </p>
+                    </div>
+                    <div class="clean-card-footer">
+                        <span>Starting from ₹750/-</span>
+                    </div>
+                </div>
+                
+                <!-- Card 2: Theme Cakes -->
+                <div class="clean-card" id="offerThemeCakes">
+                    <div class="clean-card-img-wrap">
+                        <div class="prod-img-placeholder"></div>
+                    </div>
+                    <div class="clean-card-content">
+                        <h4>Theme Cakes</h4>
+                        <p>Fully customised designs crafted to match your celebration theme.
+                            <span class="offer-highlight">Buy 3 KG Get 1 KG Free</span>
+                        </p>
+                    </div>
+                    <div class="clean-card-footer">
+                        <span>Premium Customisation</span>
+                    </div>
+                </div>
+                
+                <!-- Card 3: Bulk Orders -->
+                <div class="clean-card" id="offerBulkOrders">
+                    <div class="clean-card-img-wrap">
+                        <div class="prod-img-placeholder"></div>
+                    </div>
+                    <div class="clean-card-content">
+                        <h4>Bulk Orders</h4>
+                        <p>Planning for a celebration? We take bulk orders with exclusive seasonal offers.
+                            <span class="offer-highlight">Special Festive Pricing</span>
+                        </p>
+                    </div>
+                    <div class="clean-card-footer">
+                        <span>Contact for details</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact methods for delivery inquiries -->
+            <div class="contact-delivery-box reveal">
+                <p class="delivery-contact-text">
+                    For delivery charges, contact us on 
+                    <a href="https://wa.me/919962202704" target="_blank" rel="noopener" class="contact-link link-whatsapp" aria-label="Contact on WhatsApp">WhatsApp</a> 
+                    or 
+                    <a href="tel:9962202704" class="contact-link link-phone" aria-label="Call us at 9962202704">Call Us</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         ORDER BOOKING FORM
+         Multi-section form for placing orders via WhatsApp.
+         Sections: Customer Details → Order Items → Custom Cake → Delivery.
+         On submit, builds a formatted WhatsApp message and opens it.
+         ========================================================== -->
+    <section class="order section-padding" id="order" aria-label="Place Your Order">
+        <div class="container">
+            <div class="section-head reveal">
+                <h2>Place Your Order</h2>
+                <p>Fill in the details below and we'll prepare your order.</p>
+            </div>
+            <form class="order-form reveal" id="orderForm" novalidate>
+                <!-- Customer Details Section -->
+                <div class="form-section">
+                    <h3>Customer Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="customerName">Customer Name *</label>
+                            <input type="text" id="customerName" class="form-input" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="customerPhone">Phone Number *</label>
+                            <input type="tel" id="customerPhone" class="form-input" placeholder="Your phone number" required>
+                        </div>
+                        <div class="form-group full">
+                            <label class="form-label" for="deliveryAddress">Delivery Address *</label>
+                            <textarea id="deliveryAddress" class="form-input form-textarea" placeholder="Full delivery address" rows="2" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Items Section (dynamic rows) -->
+                <div class="form-section">
+                    <h3>Order Items</h3>
+                    <div id="orderItemsContainer">
+                        <div class="order-item-row">
+                            <div class="form-grid form-grid-order">
+                                <div class="form-group">
+                                    <label class="form-label">Item *</label>
+                                    <select class="form-input item-select" aria-label="Select an item">
+                                        <option value="" data-cat="">Select an item</option>
+                                        <optgroup label="Cakes">
+                                            <option value="Vanilla" data-cat="cake">Vanilla — ₹290 / ₹650</option>
+                                            <option value="Black Forest" data-cat="cake">Black Forest — ₹330 / ₹680</option>
+                                            <option value="Strawberry" data-cat="cake">Strawberry — ₹330 / ₹725</option>
+                                            <option value="Pineapple" data-cat="cake">Pineapple — ₹330 / ₹725</option>
+                                            <option value="Kiwi" data-cat="cake">Kiwi — ₹330 / ₹725</option>
+                                            <option value="Black Current" data-cat="cake">Black Current — ₹330 / ₹725</option>
+                                            <option value="Butter Scotch" data-cat="cake">Butter Scotch — ₹330 / ₹725</option>
+                                            <option value="Green Apple" data-cat="cake">Green Apple — ₹330 / ₹725</option>
+                                            <option value="Litchi" data-cat="cake">Litchi — ₹340 / ₹735</option>
+                                            <option value="Raspberry" data-cat="cake">Raspberry — ₹335 / ₹730</option>
+                                            <option value="German Black Forest" data-cat="cake">German Black Forest — ₹335 / ₹730</option>
+                                            <option value="Mango" data-cat="cake">Mango — ₹350 / ₹740</option>
+                                            <option value="White Forest" data-cat="cake">White Forest — ₹360 / ₹750</option>
+                                            <option value="Vintage Truffle" data-cat="cake">Vintage Truffle — ₹375 / ₹750</option>
+                                            <option value="Irish Coffee" data-cat="cake">Irish Coffee — ₹375 / ₹750</option>
+                                            <option value="English Toffee" data-cat="cake">English Toffee — ₹380 / ₹760</option>
+                                            <option value="Gukkand Honey" data-cat="cake">Gukkand Honey — ₹380 / ₹760</option>
+                                            <option value="Choco Scotch" data-cat="cake">Choco Scotch — ₹370 / ₹720</option>
+                                            <option value="White Choco Mirror" data-cat="cake">White Choco Mirror — ₹475 / ₹850</option>
+                                            <option value="Fruit Feast" data-cat="cake">Fruit Feast — ₹510 / ₹1000</option>
+                                            <option value="Jamun Cake" data-cat="cake">Jamun Cake — ₹510 / ₹1000</option>
+                                            <option value="Dark Choco Nutty" data-cat="cake">Dark Choco Nutty — ₹510 / ₹1000</option>
+                                            <option value="Mud Forest" data-cat="cake">Mud Forest — ₹519 / ₹1000</option>
+                                            <option value="Zebra" data-cat="cake">Zebra — ₹435 / ₹850</option>
+                                            <option value="Pistachio" data-cat="cake">Pistachio — ₹460 / ₹1000</option>
+                                            <option value="Roasted Almond" data-cat="cake">Roasted Almond — ₹460 / ₹900</option>
+                                            <option value="Brownie Fudge" data-cat="cake">Brownie Fudge — ₹480 / ₹940</option>
+                                            <option value="Rainbow Gateaux" data-cat="cake">Rainbow Gateaux 1.5kg — ₹1500</option>
+                                        </optgroup>
+                                        <optgroup label="Snacks">
+                                            <option value="Veg Puff" data-cat="snack">Veg Puff</option>
+                                            <option value="Garlic Roast" data-cat="snack">Garlic Roast</option>
+                                        </optgroup>
+                                        <optgroup label="Pastries">
+                                            <option value="Red Velvet Pastry" data-cat="snack">Red Velvet Pastry</option>
+                                            <option value="Butterscotch Pastry" data-cat="snack">Butterscotch Pastry</option>
+                                            <option value="Black Forest Pastry" data-cat="snack">Black Forest Pastry</option>
+                                            <option value="Choco Truffle Pastry" data-cat="snack">Choco Truffle Pastry</option>
+                                            <option value="White Forest Pastry" data-cat="snack">White Forest Pastry</option>
+                                        </optgroup>
+                                        <optgroup label="Doughnuts">
+                                            <option value="Chocolate Doughnut" data-cat="snack">Chocolate Doughnut</option>
+                                            <option value="White Chocolate Doughnut" data-cat="snack">White Chocolate Doughnut</option>
+                                            <option value="Caramel Doughnut" data-cat="snack">Caramel Doughnut</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group size-group">
+                                    <label class="form-label">Size</label>
+                                    <select class="form-input size-select" aria-label="Select cake size">
+                                        <option value="500g (Half kg)">½ KG</option>
+                                        <option value="1 kg">1 KG</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Qty</label>
+                                    <input type="number" class="form-input qty-input" min="1" value="1" aria-label="Quantity">
+                                </div>
+                                <div class="form-group form-group-action">
+                                    <button type="button" class="btn-remove-item" title="Remove item" aria-label="Remove this item" style="visibility:hidden;">✕</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-item" id="addItemBtn" aria-label="Add another item to order">+ Add Another Item</button>
+                </div>
+
+                <!-- Custom Cake Toggle Section -->
+                <div class="form-section">
+                    <div class="form-section-toggle">
+                        <h3>Custom Cake Order</h3>
+                        <label class="toggle-switch" aria-label="Enable custom cake order">
+                            <input type="checkbox" id="customCakeToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="custom-cake-fields" id="customCakeFields" style="display:none;">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label" for="cakeFlavor">Flavor</label>
+                                <input type="text" id="cakeFlavor" class="form-input" placeholder="e.g., Chocolate">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cakeWeight">Weight</label>
+                                <input type="text" id="cakeWeight" class="form-input" placeholder="e.g., 2 kg">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cakeTheme">Theme</label>
+                                <input type="text" id="cakeTheme" class="form-input" placeholder="e.g., Unicorn">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="cakeMessage">Message</label>
+                                <input type="text" id="cakeMessage" class="form-input" placeholder="e.g., Happy Birthday!">
+                            </div>
+                            <div class="form-group full">
+                                <label class="form-label" for="cakeNotes">Notes</label>
+                                <textarea id="cakeNotes" class="form-input form-textarea" placeholder="Any special instructions..." rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Details Section -->
+                <div class="form-section">
+                    <h3>Delivery Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="deliveryDate">Date *</label>
+                            <input type="date" id="deliveryDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="deliveryTime">Time *</label>
+                            <input type="time" id="deliveryTime" class="form-input" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit button — opens WhatsApp with formatted order -->
+                <button type="submit" class="btn btn-cta btn-submit" id="orderSubmitBtn">Place Order via WhatsApp</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         FIND US — Location & Map
+         Split layout: address text + embedded Google Map iframe.
+         ========================================================== -->
+    <section class="find-us" id="find-us" aria-label="Find Our Location">
+        <div class="container">
+            <div class="find-us-row reveal">
+                <div class="find-us-text">
+                    <h2>Find Us</h2>
+                    <p>Kundrathur Main Rd, Kovur, Thandalam, Chennai 600128</p>
+                    <p class="find-us-hours">Daily 11 AM – 10 PM</p>
+                    <a href="https://maps.app.goo.gl/ukWWhVnGa8eZesAS8" target="_blank" rel="noopener"
+                        class="find-us-link" aria-label="Open Fluffy Frosting location in Google Maps">Open in Google Maps →</a>
+                </div>
+                <div class="find-us-map">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.0!2d80.1231047!3d13.0103895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a528c10799e3d5b%3A0x56e28b05e7aef42e!2sFluffy%20frosting!5e0!3m2!1sen!2sin!4v1709800000000!5m2!1sen!2sin"
+                        width="100%" height="220" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" title="Fluffy Frosting Location on Google Maps"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================
+         FLOATING CART UI
+         Fixed-position cart button (bottom-right) showing item count.
+         Opens a slide-in sidebar with cart contents.
+         ========================================================== -->
+    <div class="floating-cart" id="floatingCartBtn" role="button" tabindex="0" aria-label="Open shopping cart">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cart-icon" aria-hidden="true"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="cart-badge" id="cartBadge" aria-live="polite">0</span>
+    </div>
+
+    <!-- Cart Sidebar Modal -->
+    <div class="cart-overlay" id="cartOverlay" aria-hidden="true"></div>
+    <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping Cart" role="dialog">
+        <div class="cart-header">
+            <h3>Your Order</h3>
+            <button class="cart-close-btn" id="cartCloseBtn" aria-label="Close cart">✕</button>
+        </div>
+        <div class="cart-items" id="cartItemsList">
+            <div class="cart-empty-msg" id="cartEmptyMsg">
+                <p>Your cart is empty.</p>
+                <span class="cart-empty-hint">Add delicious items from the menu to get started!</span>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <button class="btn btn-cta btn-proceed" id="cartProceedBtn" disabled aria-label="Proceed to order details">Proceed to Details</button>
+        </div>
+    </aside>
+
+    <!-- ==========================================================
+         SUCCESS MODAL
+         Shown after order is submitted via WhatsApp.
+         Displays confirmation message with bakery logo.
+         ========================================================== -->
+    <div class="success-modal-wrapper" id="successModal" role="dialog" aria-label="Order Success" aria-hidden="true">
+        <div class="success-modal-content">
+            <div class="success-modal-icon-wrap">
+                <img src="images/preloader-logo.jpg" alt="Fluffy Frosting - Order Confirmed" class="success-modal-img" width="120" height="60">
+            </div>
+            <p class="success-sub">Order placed successfully! We'll confirm with you shortly.</p>
+            <button class="btn btn-outline" id="successCloseBtn" style="color: var(--clr-purple) !important; border-color: var(--clr-purple) !important; margin-top: 2rem;" aria-label="Return to homepage">Back to Home</button>
+        </div>
+    </div>
+
+    </main>
+
+    <!-- ==========================================================
+         FOOTER
+         Three-column layout: Brand info, Contact, Visit Us.
+         Uses semantic <address> element for contact details.
+         ========================================================== -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand">Fluffy Frosting</div>
+                    <p class="footer-tagline">The Cake Shop</p>
+                    <p class="footer-desc">Bakers and makers of all things sweet, creating cakes for all celebrations.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <address>
+                        <ul class="footer-links">
+                            <li><a href="tel:9962202704" aria-label="Call Fluffy Frosting">9962202704</a></li>
+                            <li><a href="https://wa.me/919962202704" target="_blank" rel="noopener" aria-label="WhatsApp Orders">WhatsApp Orders</a></li>
+                            <li><a href="https://www.instagram.com/fluffyfrosting4u" target="_blank" rel="noopener" aria-label="Follow on Instagram">@fluffyfrosting4u</a></li>
+                        </ul>
+                    </address>
+                </div>
+                <div class="footer-col">
+                    <h3>Visit Us</h3>
+                    <address>
+                        <ul class="footer-links">
+                            <li>Kundrathur Main Rd, Kovur, Thandalam, Chennai 600128</li>
+                            <li>Daily 11 AM – 10 PM</li>
+                            <li><a href="https://maps.app.goo.gl/ukWWhVnGa8eZesAS8" target="_blank" rel="noopener" aria-label="Get Directions on Google Maps">Get Directions →</a></li>
+                        </ul>
+                    </address>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> Fluffy Frosting. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main application script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
